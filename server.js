@@ -11,8 +11,14 @@ const app = express();
 
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
-const db = process.env.MONGOURI;
 
+
+if(process.env.NODE_ENV === 'production'){
+    const db = process.env.MONGOURI;
+}
+if(process.env.NODE_ENV === 'development'){
+    const db = "";
+}
 
 
 mongoose.connect(db,{useNewUrlParser: true}).then(() => {
