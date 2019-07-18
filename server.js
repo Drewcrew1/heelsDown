@@ -2,7 +2,9 @@ const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 
-const users = require('./routes/api/users');
+ const users = require('./routes/api/user');
+ const trainers = require('./routes/api/trainer');
+ const farms = require('./routes/api/farm');
 
 const path = require('path');
 const app = express();
@@ -22,7 +24,8 @@ mongoose.connect(db,{useNewUrlParser: true}).then(() => {
 
 
 app.use('/api/users', users);
-
+app.use('/api/trainers', trainers);
+app.use('/api/farms', farms);
 
 if(process.env.NODE_ENV === 'production'){
     app.use(express.static('client/build'));
