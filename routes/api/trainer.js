@@ -85,4 +85,16 @@ router.get('/getall',(req,res) => {
     });
 });
 
+//@route get api/trainers/getall
+//@access Public
+//validation add
+router.get('/selectTime',(req,res) => {
+    
+    Trainer.find({farm: req.body.farm}).populate('farm', 'name').then((all) => {
+      return res.json(all);
+            
+    }).catch((err) => {
+        console.log(err);
+    });
+});
 module.exports = router;
