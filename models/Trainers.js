@@ -12,12 +12,19 @@ const TrainerSchema = new Schema({
    },
     farm: {
         type: Schema.Types.ObjectId,
-        ref: 'farm'  
+        ref: 'farms'  
     },
     times: [
         {
             day: String,
-            time: number
+            time:{
+                type: Number
+            },
+            booked: Boolean,
+            user: {
+                type: Schema.Types.ObjectId,
+                 ref: 'users'
+            } 
             
         }
     ]  

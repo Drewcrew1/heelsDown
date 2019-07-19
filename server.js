@@ -12,13 +12,13 @@ const app = express();
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
 
-
-if(process.env.NODE_ENV === 'production'){
-    const db = process.env.MONGOURI;
-}
-if(process.env.NODE_ENV === 'development'){
-    const db = "";
-}
+let db = "mongodb://drewcrew1:drewcar1@ds249123.mlab.com:49123/launchpartner";
+// if(process.env.NODE_ENV === 'production'){
+//  db = process.env.MONGOURI;
+// }
+// if(process.env.NODE_ENV === 'development'){
+//  db = "mongodb://drewcrew1:drewcar1@ds249123.mlab.com:49123/launchpartner";
+// }
 
 
 mongoose.connect(db,{useNewUrlParser: true}).then(() => {

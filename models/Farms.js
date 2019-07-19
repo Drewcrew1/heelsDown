@@ -10,10 +10,10 @@ const FarmSchema = new Schema({
        type: String,
        required: true
    },
-   trainers: {
+   trainers: [{
     type: Schema.Types.ObjectId,
    ref: 'trainers' 
-},
+}],
     timesBooked: [
         {
             user:{
