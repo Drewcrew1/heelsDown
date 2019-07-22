@@ -50,18 +50,47 @@ getTimes = () => {
         console.log(err);
     });
 };
+removeUser = (timeId) => {
+console.log('timeid',timeId);
+let data = {
+    trainerId: this.state.times[0]._id,
+    timeId: timeId
+};
+axios.post('/api/farms/removeUser',data).then((res) => {
+    console.log('res in remove user',res);
+}).catch((err) => console.log(err));
+};
 
 
     render(){
+        console.log(this.state);
         let times;
+        let timeId;
+        let booked;
         if(this.state.times !== null){
-console.log(this.state.times);
+
 let name = this.state.times[0].name;
+let user;
+
+if(this.state.times[0].times[0].user){
+     user = this.state.times[0].times[0].user.name;
+     timeId = this.state.times[0].times[0]._id;
+     booked = this.state.times[0].times[0].booked;
+}
             times = (
                 this.state.times[0].times.map((item) => {
-                   return (
-                       <p>{name} -- {item.day} -- {item.time}</p>
-                   );
+                    if(user !== undefined && booked === true){
+                        return (
+                            <p>{name} -- {item.day} -- {item.time}--Booked with {user}</p>
+     
+                        );
+                    }else{
+                        return (
+                            <p>{name} -- {item.day} -- {item.time}</p>
+     
+                        );
+                    }
+                  
                 })
             );
 
@@ -113,6 +142,11 @@ let name = this.state.times[0].name;
                     <hr/>
 
                     {times}
+
+                    <hr/>
+                    <p>Farm managment</p>
+                    {times}
+                    <button onClick={() => this.removeUser(timeId)}>Remove User from training session</button>
                 </div>
         );
     }

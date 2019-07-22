@@ -64,4 +64,39 @@ router.get('/getTrainers',(req,res) => {
     });
 });
 
+//@route get api/farms/getTrainers
+//@access Public
+//validation add
+router.post('/removeUser',(req,res) => {
+    console.log(req.body);
+
+    Trainer.findOneAndUpdate({
+        _id: req.body.trainerId
+    },{
+        $set: {"times.0.booked": false}
+    },{
+        new: true
+    }).then((trainer) => {
+        console.log('trainer in api',trainer);
+    }).catch((err) => {
+        console.log(err);
+    });
+
+
+    // Trainer.findById({_id: req.body.trainerId}).then((trainer) => {
+
+
+    //   console.log('trainer in farm api',trainer);
+    //    // res.json(trainer[0].times[0].user);
+    //     trainer[0].times[0].user = "";
+    //     trainer.save().then((res) => {
+    //         console.log(res);
+    //     }).catch((err) => console.log(err));
+      
+            
+    // }).catch((err) => {
+    //     console.log(err);
+    // });
+});
+
 module.exports = router;

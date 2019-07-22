@@ -90,7 +90,7 @@ router.get('/getall',(req,res) => {
 //validation add
 router.get('/selectTime/:id',(req,res) => {
     console.log(req.params.id);
-    Trainer.find({farm: req.params.id}).populate('farm', 'name').then((all) => {
+    Trainer.find({farm: req.params.id}).populate('farm', 'name').populate('times.0.user','name').then((all) => {
       return res.json(all);
             
     }).catch((err) => {
@@ -125,21 +125,24 @@ router.post('/selectFarm',(req,res) => {
 //validation add
 router.get('/setUserOnTime/:email/:id/:user',(req,res) => {
     console.log(req.params.id);
-    Trainer.find({email: req.params.email}).then((trainer) => {
-        console.log(trainer[0].times[0]._id);
+    // Trainer.find({email: req.params.email}).then((trainer) => {
+    //     console.log(trainer[0].times[0]._id);
         // if(req.params.id == trainer[0].times[0]._id){
         //     console.log('same');
         // }
-        for(let i = -1; i <= trainer[0].times.length; i++){
-            if(req.params.id == trainer[0].times[0]._id){
+        // for(let i = -1; i <= trainer[0].times.length; i++){
+        //     if(req.params.id == trainer[0].times[0]._id){
 
-                let trainerFields = {
-                    user: req.params.user
-                };
+                // let trainerFields = {
+                //     "times.user": req.params.user
+                // };
                 Trainer.findOneAndUpdate({
                     email: req.params.email
                 },{
-                    $set: trainerFields
+                    $set: {"times.0.user": req.params.user,
+                            "times.0.booked": true
+                        }
+                   
                 },{
                     new: true
                 }).then((trainer) => {
@@ -148,12 +151,12 @@ router.get('/setUserOnTime/:email/:id/:user',(req,res) => {
                     console.log(err);
                 });
 
-            }
-        }
+        //     }
+        // }
 
-    }).catch((err) => {
-        console.log(err);
-    });
+    // }).catch((err) => {
+    //     console.log(err);
+    // });
 });
 
 module.exports = router;
