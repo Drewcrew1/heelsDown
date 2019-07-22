@@ -67,34 +67,59 @@ axios.post('/api/farms/removeUser',data).then((res) => {
         let times;
         let timeId;
         let booked;
+        let timeData = [];
         if(this.state.times !== null){
 
 let name = this.state.times[0].name;
 let user;
 
 if(this.state.times[0].times[0].user){
-     user = this.state.times[0].times[0].user.name;
-     timeId = this.state.times[0].times[0]._id;
-     booked = this.state.times[0].times[0].booked;
-}
-            times = (
-                this.state.times[0].times.map((item) => {
-                    if(user !== undefined && booked === true){
-                        return (
-                            <p>{name} -- {item.day} -- {item.time}--Booked with {user}</p>
-     
-                        );
-                    }else{
-                        return (
-                            <p>{name} -- {item.day} -- {item.time}</p>
-     
-                        );
-                    }
-                  
-                })
-            );
+    user = this.state.times[0].times[0].user.name;
+    timeId = this.state.times[0].times[0]._id;
+    booked = this.state.times[0].times[0].booked;
+   
+    for(let i = 0; i < this.state.times.length; i++){
+      
+        times = (
+        this.state.times[i].times.map((item) => {
+            
+            if(user !== undefined && booked === true){
+                return (
+                    <p>{name} -- {item.day} -- {item.time}--Booked with {user}</p>
 
-        }else{
+                );
+                
+            }else{
+                return (
+                    <p>{name} -- {item.day} -- {item.time}</p>
+
+                );
+            }
+        })
+        );
+       
+        }
+    }
+  
+}
+            // times = (
+            //     this.state.times[0].times.map((item) => {
+            //         if(user !== undefined && booked === true){
+            //             return (
+            //                 <p>{name} -- {item.day} -- {item.time}--Booked with {user}</p>
+     
+            //             );
+            //         }else{
+            //             return (
+            //                 <p>{name} -- {item.day} -- {item.time}</p>
+     
+            //             );
+            //         }
+                  
+            //     })
+            // );
+
+        else{
             times = <p>No times</p>;
         }
         if(this.state.farmId !== null && this.state.rerender === true){
