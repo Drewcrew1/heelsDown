@@ -12,7 +12,9 @@ class Farms extends React.Component{
             farmName: null,
             farmEmail: null,
             renderContent: true,
-            allFarms: null
+            allFarms: null,
+            farmId: null,
+            rerender: true
         };
     }
 
@@ -22,6 +24,8 @@ axios.get('api/farms/getall').then((res) => {
 }).catch((err) => {
    console.log(err);
 });
+
+
 }
 onChange = (e) => {
     this.setState({[e.target.name]: e.target.value});
@@ -38,15 +42,43 @@ submitFarm = () => {
   });
 };
 
+getTimes = () => {
+    let farm = this.state.farmId;
+    axios.get(`/api/trainers/selectTime/${farm}`).then((res) => {
+        this.setState({times: res.data});
+    }).catch((err) => {
+        console.log(err);
+    });
+};
+
 
     render(){
+        let times;
+        if(this.state.times !== null){
+console.log(this.state.times);
+let name = this.state.times[0].name;
+            times = (
+                this.state.times[0].times.map((item) => {
+                   return (
+                       <p>{name} -- {item.day} -- {item.time}</p>
+                   );
+                })
+            );
+
+        }else{
+            times = <p>No times</p>;
+        }
+        if(this.state.farmId !== null && this.state.rerender === true){
+            this.getTimes();
+            this.setState({rerender: false});
+        }
         let allfarms;
         console.log(this.state.allFarms);
         if(this.state.allFarms !== null){
             allfarms = (
             this.state.allFarms.map((item) => {
               return (
-                  <p id={item._id}>{item.name}</p>
+                  <button onClick={() => this.setState({farmId: item._id})} id={item._id}>{item.name}</button>
               );
             })
         );
@@ -57,13 +89,13 @@ submitFarm = () => {
  if(this.state.renderContent === true){
      content = (
          <div className="hideShow">
-             <h3>Set up a farm location</h3>
-             <label >Farm name</label>
-             <input name="farmName" value={this.state.farmName} onChange={this.onChange} />
-             <label >Farm Email</label>
-             <input name="farmEmail" value={this.state.farmEmail} onChange={this.onChange} />
-             <button onClick={() => this.submitFarm()}>Make Farm</button>
-         </div>
+         <h3>Set up a farm location</h3>
+     <label >Farm name</label>
+     <input name="farmName" value={this.state.farmName} onChange={this.onChange} />
+     <label >Farm Email</label>
+     <input name="farmEmail" value={this.state.farmEmail} onChange={this.onChange} />
+     <button onClick={() => this.submitFarm()}>Make Farm</button>
+     </div>
      );
  }else{
      content = <p>{this.state.farmName}</p>;
@@ -78,6 +110,9 @@ submitFarm = () => {
                     </div>
 
                     {content}
+                    <hr/>
+
+                    {times}
                 </div>
         );
     }

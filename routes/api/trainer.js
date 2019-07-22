@@ -38,10 +38,10 @@ router.post('/setup',(req,res) => {
 router.post('/setTime',(req,res) => {
     
     Trainer.findOne({
-        email: req.body.email
+        _id: req.body.id
     }).then((trainer) => {
         if(!trainer){
-            errors.email = 'No Trainer';
+            let errors = 'No Trainer';
             return res.status(400).json(errors);
         }else{
             if(req.body.farm){
@@ -88,13 +88,72 @@ router.get('/getall',(req,res) => {
 //@route get api/trainers/getall
 //@access Public
 //validation add
-router.get('/selectTime',(req,res) => {
-    
-    Trainer.find({farm: req.body.farm}).populate('farm', 'name').then((all) => {
+router.get('/selectTime/:id',(req,res) => {
+    console.log(req.params.id);
+    Trainer.find({farm: req.params.id}).populate('farm', 'name').then((all) => {
       return res.json(all);
             
     }).catch((err) => {
         console.log(err);
     });
 });
+//@route get api/trainers/getall
+//@access Public
+//validation add
+router.post('/selectFarm',(req,res) => {
+
+    let trainerFields = {
+      farm: req.body.farmId
+    };
+
+    Trainer.findOneAndUpdate({
+        _id: req.body.trainerId
+    },{
+        $set: trainerFields
+    },{
+        new: true
+    }).then((trainer) => {
+         res.json(trainer);
+    }).catch((err) => {
+        console.log(err);
+    });
+
+});
+
+//@route get api/trainers/setusertime
+//@access Public
+//validation add
+router.get('/setUserOnTime/:email/:id/:user',(req,res) => {
+    console.log(req.params.id);
+    Trainer.find({email: req.params.email}).then((trainer) => {
+        console.log(trainer[0].times[0]._id);
+        // if(req.params.id == trainer[0].times[0]._id){
+        //     console.log('same');
+        // }
+        for(let i = -1; i <= trainer[0].times.length; i++){
+            if(req.params.id == trainer[0].times[0]._id){
+
+                let trainerFields = {
+                    user: req.params.user
+                };
+                Trainer.findOneAndUpdate({
+                    email: req.params.email
+                },{
+                    $set: trainerFields
+                },{
+                    new: true
+                }).then((trainer) => {
+                    console.log('trainer in api',trainer);
+                }).catch((err) => {
+                    console.log(err);
+                });
+
+            }
+        }
+
+    }).catch((err) => {
+        console.log(err);
+    });
+});
+
 module.exports = router;
