@@ -67,11 +67,20 @@ submitUser = () => {
         if(this.state.times !== null){
             console.log(this.state.times);
             let name = this.state.times[0].name;
+           
             times = (
+                
                 this.state.times[0].times.map((item) => {
-                    return (
-                        <button onClick={() => this.setUserOnTrainer(item)}>{name} -- {item.day} -- {item.time}</button>
-                    );
+                    if(this.state.times[0].times[0].booked === false){
+                        return (
+                            <button onClick={() => this.setUserOnTrainer(item)}>{name} -- {item.day} -- {item.time}</button>
+                        );
+                    }else{
+                        return (
+                            <button onClick={() => this.setUserOnTrainer(item)}>{name} -- {item.day} -- {item.time} -- Booked</button>
+                        );
+                    }
+                   
                 })
             );
 
