@@ -158,5 +158,22 @@ router.get('/setUserOnTime/:email/:id/:user',(req,res) => {
     //     console.log(err);
     // });
 });
+//@route delete api/trainers/delete
+//@access Public
+
+router.delete('/deleteTrainer',(req,res) => {
+
+
+
+    Trainer.findOneAndDelete({
+        _id: req.body.trainerId
+    
+    }).then((trainer) => {
+         res.json(trainer);
+    }).catch((err) => {
+        console.log(err);
+    });
+
+});
 
 module.exports = router;
